@@ -14,6 +14,9 @@ const (
 	clusterAPIControllerKubemark = "docker.io/gofed/kubemark-machine-controllers:v1.0"
 	clusterAPIControllerNoOp     = "no-op"
 	kubemarkPlatform             = configv1.PlatformType("kubemark")
+	// TODO: Move to github.com/openshift/api repository
+	clusterAPIControllerPowerVS = "quay.io/powercloud/origin-powervs-machine-controllers:latest"
+	powerVSPlatform             = configv1.PlatformType("powervs")
 )
 
 type Provider string
@@ -46,6 +49,7 @@ type Images struct {
 	ClusterAPIControllerOvirt     string `json:"clusterAPIControllerOvirt"`
 	ClusterAPIControllerVSphere   string `json:"clusterAPIControllerVSphere"`
 	ClusterAPIControllerKubevirt  string `json:"clusterAPIControllerKubevirt"`
+	ClusterAPIControllerPowerVS   string `json:"clusterAPIControllerPowerVS"`
 	KubeRBACProxy                 string `json:"kubeRBACProxy"`
 }
 
@@ -93,6 +97,8 @@ func getProviderControllerFromImages(platform configv1.PlatformType, images Imag
 		return images.ClusterAPIControllerKubevirt, nil
 	case kubemarkPlatform:
 		return clusterAPIControllerKubemark, nil
+	case powerVSPlatform:
+		return clusterAPIControllerPowerVS, nil
 	default:
 		return clusterAPIControllerNoOp, nil
 	}
