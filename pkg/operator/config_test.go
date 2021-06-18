@@ -19,6 +19,7 @@ var (
 	expectedOvirtImage              = "quay.io/openshift/origin-ovirt-machine-controllers"
 	expectedVSphereImage            = "docker.io/openshift/origin-machine-api-operator:v4.0.0"
 	expectedKubevirtImage           = "quay.io/openshift/origin-kubevirt-machine-controllers"
+	expectedPowerVSImage            = "quay.io/openshift/origin-powervs-machine-controllers"
 )
 
 func TestGetProviderFromInfrastructure(t *testing.T) {
@@ -122,7 +123,17 @@ func TestGetProviderFromInfrastructure(t *testing.T) {
 			},
 		},
 		expected: "",
-	}}
+	},
+		{
+			infra: &configv1.Infrastructure{
+				Status: configv1.InfrastructureStatus{
+					PlatformStatus: &configv1.PlatformStatus{
+						Type: powerVSPlatform,
+					},
+				},
+			},
+			expected: powerVSPlatform,
+		}}
 
 	for _, test := range tests {
 		res, err := getProviderFromInfrastructure(test.infra)
@@ -218,6 +229,10 @@ func TestGetProviderControllerFromImages(t *testing.T) {
 			provider:      configv1.KubevirtPlatformType,
 			expectedImage: expectedKubevirtImage,
 		},
+		{
+			provider:      powerVSPlatform,
+			expectedImage: clusterAPIControllerPowerVS,
+		},
 	}
 
 	img, err := getImagesFromJSONFile(imagesJSONFile)
@@ -278,6 +293,10 @@ func TestGetTerminationHandlerFromImages(t *testing.T) {
 		},
 		{
 			provider:      configv1.OvirtPlatformType,
+			expectedImage: clusterAPIControllerNoOp,
+		},
+		{
+			provider:      powerVSPlatform,
 			expectedImage: clusterAPIControllerNoOp,
 		},
 	}
