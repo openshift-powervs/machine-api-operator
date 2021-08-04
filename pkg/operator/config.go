@@ -16,7 +16,7 @@ const (
 	kubemarkPlatform             = configv1.PlatformType("kubemark")
 	// TODO: Move to github.com/openshift/api repository
 	clusterAPIControllerPowerVS = "quay.io/powercloud/origin-powervs-machine-controllers:latest"
-	powerVSPlatform             = configv1.PlatformType("powervs")
+	powerVSPlatform             = configv1.PlatformType("PowerVS")
 )
 
 type Provider string
